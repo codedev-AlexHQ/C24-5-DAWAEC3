@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import Navbar from '../components/Navbar';
 
 interface Medicamento {
@@ -126,213 +125,146 @@ export default function EspecialidadesPage() {
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Cargando especialidades...</p>
-      </div>
+      <>
+        <Navbar />
+        <div className="page-content">
+          <p>Cargando especialidades...</p>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="container">
-      {/* Header con navegación */}
-      <header className="page-header">
-        <div className="header-content">
-          <div className="header-left">
-            <h1 className="page-title">Sistema Farmacéutico</h1>
-            <p className="page-subtitle">Gestión de Especialidades Médicas</p>
-          </div>
-          <nav className="header-nav">
-            <Link href="/" className="nav-link">
-              📋 Medicamentos
-            </Link>
-            <Link href="/tipos" className="nav-link">
-              🏷️ Tipos de Medicamento
-            </Link>
-            <Link href="/especialidades" className="nav-link active">
-              🩺 Especialidades
-            </Link>
-          </nav>
-        </div>
-      </header>
-
-      {/* Contenido principal */}
-      <main className="main-content">
-        {/* Estadísticas generales */}
-        <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-icon">🩺</div>
-            <div className="stat-content">
-              <div className="stat-number">{especialidades.length}</div>
-              <div className="stat-label">Especialidades</div>
-            </div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon">💊</div>
-            <div className="stat-content">
-              <div className="stat-number">
-                {especialidades.reduce((total, esp) => total + (esp.medicamentos?.length || 0), 0)}
-              </div>
-              <div className="stat-label">Medicamentos Totales</div>
-            </div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-icon">📦</div>
-            <div className="stat-content">
-              <div className="stat-number">
-                {especialidades.reduce((total, esp) => {
-                  const stock = esp.medicamentos?.reduce((sum, med) => sum + med.stock, 0) || 0;
-                  return total + stock;
-                }, 0)}
-              </div>
-              <div className="stat-label">Stock Total</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Controles */}
-        <div className="controls">
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Buscar especialidades..."
-              className="search-input"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+    <>
+      <Navbar />
+      <div className="page-content">
+        <div className="table-title-row">
+          <span className="table-title">Especialidades Médicas</span>
           <button className="btn-primary" onClick={handleCreate}>
-            + Nueva Especialidad
+            Nueva Especialidad
           </button>
         </div>
 
-        {/* Tabla de especialidades */}
-        <div className="table-container">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Código</th>
-                <th>Especialidad</th>
-                <th>Medicamentos Asociados</th>
-                <th>Stock Total</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredEspecialidades.map((especialidad) => {
-                const stats = getEspecialidadStats(especialidad.medicamentos);
-                return (
-                  <tr key={especialidad.CodEspec}>
-                    <td>
-                      <span className="code-badge">{especialidad.CodEspec}</span>
-                    </td>
-                    <td>
-                      <div className="especialidad-info">
-                        <div className="especialidad-name">{especialidad.descripcionEsp}</div>
-                      </div>
-                    </td>
-                    <td>
-                      {stats.totalMedicamentos > 0 ? (
-                        <div className="medicamentos-summary">
-                          <span className="count-badge">{stats.totalMedicamentos}</span>
-                          <div className="medicamentos-list">
-                            {especialidad.medicamentos?.slice(0, 3).map((med) => (
-                              <span key={med.CodMedicamento} className="medicamento-tag">
-                                {med.descripcionMed}
-                              </span>
-                            ))}
-                            {especialidad.medicamentos && especialidad.medicamentos.length > 3 && (
-                              <span className="more-tag">+{especialidad.medicamentos.length - 3} más</span>
-                            )}
-                          </div>
-                        </div>
-                      ) : (
-                        <span className="empty-state">Sin medicamentos</span>
-                      )}
-                    </td>
-                    <td>
-                      <span className={`stock-badge ${stats.stockTotal > 0 ? 'has-stock' : 'no-stock'}`}>
-                        {stats.stockTotal} unidades
-                      </span>
-                    </td>
-                    <td>
-                      <div className="action-buttons">
-                        <button
-                          className="btn-edit"
-                          onClick={() => handleEdit(especialidad)}
-                          title="Editar especialidad"
-                        >
-                          ✏️
-                        </button>
-                        <button
-                          className="btn-delete"
-                          onClick={() => handleDelete(especialidad.CodEspec)}
-                          title="Eliminar especialidad"
-                        >
-                          🗑️
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-
-          {filteredEspecialidades.length === 0 && (
-            <div className="empty-state-container">
-              <div className="empty-state-icon">🩺</div>
-              <h3>No se encontraron especialidades</h3>
-              <p>
-                {searchTerm 
-                  ? `No hay especialidades que coincidan con "${searchTerm}"`
-                  : 'Aún no hay especialidades registradas'
-                }
-              </p>
-              {!searchTerm && (
-                <button className="btn-primary" onClick={handleCreate}>
-                  Crear primera especialidad
-                </button>
-              )}
-            </div>
-          )}
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Buscar especialidades..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-      </main>
 
-      {/* Modal */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <div className="modal-header">
-              <h3>{editId ? 'Editar Especialidad' : 'Nueva Especialidad'}</h3>
-              <button className="modal-close" onClick={() => setShowModal(false)}>
-                ×
+        <table className="table-list">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Especialidad</th>
+              <th>Medicamentos Asociados</th>
+              <th>Stock Total</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredEspecialidades.map((especialidad) => {
+              const stats = getEspecialidadStats(especialidad.medicamentos);
+              return (
+                <tr key={especialidad.CodEspec}>
+                  <td>#{especialidad.CodEspec}</td>
+                  <td>{especialidad.descripcionEsp}</td>
+                  <td>
+                    {stats.totalMedicamentos > 0 ? (
+                      <>
+                        {especialidad.medicamentos?.slice(0, 3).map(med => (
+                          <div key={med.CodMedicamento} style={{ fontSize: 13, color:'#2776e6' }}>
+                            • {med.descripcionMed}
+                          </div>
+                        ))}
+                        {especialidad.medicamentos && especialidad.medicamentos.length > 3 && (
+                          <div style={{ color:'#555', fontSize: 12 }}>
+                            +{especialidad.medicamentos.length - 3} más...
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <span style={{ color: '#888', fontSize: 13 }}>Sin medicamentos asociados</span>
+                    )}
+                  </td>
+                  <td>
+                    {stats.stockTotal > 0 ? (
+                      <span>{stats.stockTotal} unidades</span>
+                    ) : (
+                      <span style={{ color: '#888' }}>0 unidades</span>
+                    )}
+                  </td>
+                  <td className="action-cell">
+                    <button
+                      className="action-btn edit"
+                      title="Editar"
+                      onClick={() => handleEdit(especialidad)}
+                    >✏️</button>
+                    <button
+                      className="action-btn delete"
+                      title="Eliminar"
+                      onClick={() => handleDelete(especialidad.CodEspec)}
+                    >🗑️</button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+        {filteredEspecialidades.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
+            <h3>No se encontraron especialidades</h3>
+            <p>
+              {searchTerm 
+                ? `No hay especialidades que coincidan con "${searchTerm}"`
+                : 'Aún no hay especialidades registradas'
+              }
+            </p>
+            {!searchTerm && (
+              <button className="btn-primary" onClick={handleCreate}>
+                Crear primera especialidad
               </button>
-            </div>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="descripcionEsp">Descripción de la Especialidad</label>
+            )}
+          </div>
+        )}
+
+        {/* Modal */}
+        {showModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <div className="modal-header">
+                <span className="modal-title">
+                  {editId ? 'Editar Especialidad' : 'Nueva Especialidad'}
+                </span>
+                <button className="modal-close" onClick={() => setShowModal(false)}>
+                  ×
+                </button>
+              </div>
+              <form onSubmit={handleSubmit}>
+                <label>Descripción de la Especialidad</label>
                 <input
                   type="text"
-                  id="descripcionEsp"
                   value={form.descripcionEsp}
                   onChange={(e) => setForm({ ...form, descripcionEsp: e.target.value })}
                   placeholder="Ej: Cardiología, Neurología, Dermatología..."
                   required
                 />
-              </div>
-              <div className="modal-actions">
-                <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>
-                  Cancelar
-                </button>
-                <button type="submit" className="btn-primary">
-                  {editId ? 'Actualizar' : 'Crear'}
-                </button>
-              </div>
-            </form>
+                <div className="modal-footer">
+                  <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>
+                    Cancelar
+                  </button>
+                  <button type="submit" className="btn-save">
+                    {editId ? 'Actualizar' : 'Crear'}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }

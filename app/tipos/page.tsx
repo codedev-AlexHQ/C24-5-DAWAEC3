@@ -79,18 +79,9 @@ export default function TiposPage() {
 
   const filteredTipos = tipoMedics.filter(tipo =>
     tipo.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  return (
+  );  return (
     <>
       <Navbar />
-      <div className="header-bar">
-        <span className="header-title">Sistema Farmacéutico</span>
-        <div className="header-nav">
-          <a href="/">Medicamentos</a>
-          <a href="/tipos" className="active">Tipos de Medicamento</a>
-          <a href="/especialidades">Especialidades</a>
-        </div>
-      </div>
       <div className="page-content">
         <div className="table-title-row">
           <span className="table-title">Tipos de Medicamento</span>

@@ -18,9 +18,7 @@ export default function Navbar() {
             <Link href="/" className="text-xl font-bold hover:text-blue-200 transition-colors">
               Sistema Farmacéutico
             </Link>
-          </div>
-
-          {/* Navegación */}
+          </div>          {/* Navegación */}
           <div className="flex items-center space-x-2">
             <Link
               href="/"
@@ -30,8 +28,18 @@ export default function Navbar() {
                   : 'text-blue-100 hover:bg-white/10 hover:text-white'
               }`}
             >
+              🏠 Inicio
+            </Link>
+            <Link
+              href="/medicamentos"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                pathname === '/medicamentos'
+                  ? 'bg-white/20 text-white shadow-md'
+                  : 'text-blue-100 hover:bg-white/10 hover:text-white'
+              }`}
+            >
               💊 Medicamentos
-            </Link>            <Link
+            </Link><Link
               href="/tipos"
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 pathname === '/tipos'
